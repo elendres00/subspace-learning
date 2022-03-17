@@ -39,25 +39,28 @@ if (args.dataset == 'digits'):
     digits = load_digits()
     data = digits.images
     n_samples, n_rows, n_columns = data.shape
-    p = 24
-    p1 = 5
-    p2 = 5
+    p_pca = 24
+    p2_2dpca = 3
+    p1_mpca = 5
+    p2_mpca = 5
 elif (args.dataset == 'olivetti'):
     olivetti_faces = fetch_olivetti_faces(data_home='./Datasets/olivetti')
     data = olivetti_faces.images
     n_samples, n_rows, n_columns = data.shape
-    p = 36
-    p1 = 20
-    p2 = 20
+    p_pca = 40
+    p2_2dpca = 7
+    p1_mpca = 21
+    p2_mpca = 21
 elif (args.dataset == 'lfw'):
     lfw_people = fetch_lfw_people(
         data_home='./Datasets/lfw', min_faces_per_person=70
     )
     data = lfw_people.images
     n_samples, n_rows, n_columns = data.shape
-    p = 123
-    p1 = 20
-    p2 = 20
+    p_pca = 103
+    p2_2dpca = 5
+    p1_mpca = 21
+    p2_mpca = 16
 
 print(
     "The data has {0} samples with shape {1}."
@@ -72,19 +75,19 @@ data = data - data_mean
 # Reshape the data samples into vectors and apply PCA
 print("----------PCA----------")
 print("Applying PCA to the data")
-pca = PCA(p)
+pca = PCA(p_pca)
 data_pca = pca.fit(data.reshape(n_samples, -1))
 
 # Apply 2DPCA
 print("----------2DPCA----------")
 print("Applying 2DPCA to the data")
-twodpca = TwoDimensionalPCA(p2)
+twodpca = TwoDimensionalPCA(p2_2dpca)
 data_2dpca = twodpca.fit(data)
 
 # Apply MPCA
 print("----------MPCA----------")
 print("Applying MPCA to the data")
-mpca = MultilinearPCA([p1, p2], n_iterations=5)
+mpca = MultilinearPCA([p1_mpca, p2_mpca], n_iterations=5)
 data_mpca = mpca.fit(data)
 
 # Reconstruct images
@@ -95,21 +98,21 @@ reconstructed_data_mpca = mpca.inverse_transform(data_mpca) + data_mean
 
 # Plot some images and their reconstruction
 fig, axs = plt.subplots(
-    4, 10,
+    4, 5,
     subplot_kw=dict(xticks=[], yticks=[]),
     gridspec_kw=dict(hspace=0.1, wspace=0.1)
 )
 # For images plot the first sample images
-for i in range(10):
+for i in range(5):
     axs[0, i].imshow(data[i], cmap='binary_r')
     axs[1, i].imshow(reconstructed_data_pca[i], cmap='binary_r')
     axs[2, i].imshow(reconstructed_data_2dpca[i], cmap='binary_r')
     axs[3, i].imshow(reconstructed_data_mpca[i], cmap='binary_r')
 
 
-axs[0,0].set_ylabel('original data\ninput')
-axs[1,0].set_ylabel('reconstructed data\nPCA')
-axs[2,0].set_ylabel('reconstructed data\n2DPCA')
-axs[3,0].set_ylabel('reconstructed data\nMPCA')
+axs[0,0].set_ylabel('original')
+axs[1,0].set_ylabel('PCA')
+axs[2,0].set_ylabel('2DPCA')
+axs[3,0].set_ylabel('MPCA')
 
 plt.show()
