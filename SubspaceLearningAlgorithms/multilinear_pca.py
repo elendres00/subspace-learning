@@ -127,11 +127,9 @@ class MultilinearPCA:
         self.mean_ = np.mean(X, axis=0)
         X -= self.mean_
 
-        # Initialize the variance and the projection_matrices
+        # Initialize the variance
         variance = 0
         projection_matrices = []
-        for n_mode_dim in tensor_shape:
-            projection_matrices.append(np.identity(n_mode_dim))
 
         # Local optimization of the projection_matrices
         for k in range(self.n_iterations):
@@ -141,17 +139,20 @@ class MultilinearPCA:
             for n in range(tensor_order):
                 # Compute the projection of all tensors in X on the tensor subspace
                 # given by the old projection_matrices except the nth-mode component
-                X_n = tensor.multi_mode_dot(
-                    X,
-                    projection_matrices_old,
-                    modes=range(1, tensor_order+1),
-                    skip=n+1
-                )
+                if k > 0:
+                    X_n = tensor.multi_mode_dot(
+                        X,
+                        projection_matrices_old,
+                        modes=range(1, tensor_order+1),
+                        skip=n+1
+                    )
+                else:
+                    X_n = X
                 # Unfold each tensor sample in X along the n-th mode and store the
-                # nth-mode vectors of each tensor in the rows of X_unfold_n
-                X_unfold_n = tensor.unfold(X_n, n+1)
+                # nth-mode vectors of each tensor in the rows of X_n
+                X_n = tensor.unfold(X_n, n+1)
                 # Compute the new projection matrix for the nth-mode
-                U, S, VT = linalg.svd(X_unfold_n, full_matrices=False)
+                U, S, VT = linalg.svd(X_n, full_matrices=False)
                 projection_matrices.append(VT[:projection_shape[n]].T)
 
             # Compute the projection of all tensors in X onto the tensor subspace
