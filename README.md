@@ -7,7 +7,7 @@ algorithms PCA, 2DPCA and MPCA.
 
 ## Datasets
 The UCI ML Digits, ORL and LFW datasets are automatically downloaded by the scikit-learn library
-functions and then stored in the `/Datasets` folder. 
+functions and then stored in the `/Datasets/` folder. 
 The [AVLetters](http://www.ee.surrey.ac.uk/Projects/LILiR/datasets/avletters1/index.html)
 dataset with the lip videos in Matlab's `.mat` format should be placed in the datasets
 folder like this `/Datasets/avletters/Lips/lip_video.mat`.
