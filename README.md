@@ -4,6 +4,7 @@ algorithms PCA, 2DPCA and MPCA.
 
 ## Dependencies
 `scikit-learn`
+`matplotlib`
 
 ## Datasets
 The UCI ML Digits, ORL and LFW datasets are automatically downloaded by the scikit-learn library
