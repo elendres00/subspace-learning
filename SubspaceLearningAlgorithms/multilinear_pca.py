@@ -12,9 +12,9 @@ class MultilinearPCA:
     """Multilinear Principal Component Analysis (MPCA).
 
     PCA based multilinear subspace learning method operating directly
-    on the input tensor objects to project them to a lower dimensional
-    tensor subspace, such that the variance of the projected tensors
-    objects is maximized.
+    on the tensor objects finding a lower dimensional tensor subspace,
+    such that the variance of the projected tensors objects is
+    maximized.
     The input tensors are centered before applying the projection.
 
     Let N denote the order of the tensor objects then:
@@ -24,8 +24,8 @@ class MultilinearPCA:
     Parameters
     ----------
     projection_shape : ndarray of shape (N,) of ints, default=None
-        The is projection_shape is given by (p_1,...,p_N), which gives
-        the dimension of the nth-mode of the projected tensor as p_n.
+        The projection_shape is given by (p_1,...,p_N), which gives
+        us the shape of the projected tensor samples.
         If projection_shape is not set, we use:
 
             projection_shape[n] = min(n_samples*i_1*...*i_(n-1)*i_(n+1)*...*i_N, i_n)
@@ -44,7 +44,7 @@ class MultilinearPCA:
     projection_matrices_ : list of N ndarray's of shape (i_n, p_n)
         The N projection matrices containing p_n basis vectors
         of the n-mode space R^{i_n} for each mode n in 1,...,N,
-        forming a tensor subspace capturing the most variation
+        which form a tensor subspace capturing the most variation
         in the input tensors.
         The p_n vectors of each matrix are sorted by
         decreasing eigenvalue for each mode n in 1,...,N.
@@ -54,7 +54,7 @@ class MultilinearPCA:
         Equal to `X.mean(axis=0)`.
 
     tensor_order_ : int
-        The order or the number of dimensions N of the tensor objects.
+        The order N of the tensor objects.
 
     tensor_shape_ : ndarray of shape (N,)
         The shape of the tensor objects. That is given by (i_1,...,i_N).
@@ -139,15 +139,15 @@ class MultilinearPCA:
             for n in range(tensor_order):
                 # Compute the projection of all tensors in X on the tensor subspace
                 # given by the old projection_matrices except the nth-mode component
-                if k > 0:
+                if k == 0:
+                    X_n = X
+                else:
                     X_n = tensor.multi_mode_dot(
                         X,
                         projection_matrices_old,
                         modes=range(1, tensor_order+1),
                         skip=n+1
                     )
-                else:
-                    X_n = X
                 # Unfold each tensor sample in X along the n-th mode and store the
                 # nth-mode vectors of each tensor in the rows of X_n
                 X_n = tensor.unfold(X_n, n+1)
@@ -198,7 +198,7 @@ class MultilinearPCA:
         )
 
     def inverse_transform(self, X):
-        """Transform data back to its original space.
+        """Transform data back to the original space.
 
         In other words, return an input `X_original` whose transform would be X.
 

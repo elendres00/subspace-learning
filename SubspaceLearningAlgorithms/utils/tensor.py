@@ -1,6 +1,7 @@
 """ Tensor Utilities.
 """
-
+# Copyright (c) 2022, Elias Endres;
+# Copyright (c) 2016 The tensorly Developers.
 # License: BSD 3 clause
 
 import numpy as np
@@ -36,14 +37,14 @@ def fold(unfolded_tensor, mode, shape):
 
     Parameters
     ----------
-    unfolded_tensor : ndarray of shape (-1, shape[mode])
+    unfolded_tensor : ndarray of shape (-1, tensor.shape[mode])
         The unfolded tensor along mode-`mode` which has
         the mode-`mode` vectors of the tensor in the rows.
 
     mode : int
         The mode the tensor was unfolded along.
         The indexing starts at 0,
-        therefore mode is in ``range(0, shape)``
+        therefore mode is in ``range(0, len(shape))``
 
     shape : tuple
         Shape of the original tensor before unfolding.

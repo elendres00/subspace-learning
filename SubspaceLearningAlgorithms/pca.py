@@ -1,6 +1,8 @@
 """Principal Component Analysis.
 """
 
+# Copyright (c) 2022, Elias Endres;
+# Copyright (c) 2007-2022 The scikit-learn developers.
 # License: BSD 3 clause
 
 import numpy as np
@@ -11,8 +13,8 @@ class PCA:
     """Principal Component Analysis (PCA).
 
     Linear subspace learning method using Singular Value Decomposition (SVD)
-    to find a projection to a lower dimensional linear space, such that the
-    variance of the projected samples is maximized.
+    to find a lower dimensional linear subspace, such that the variance of
+    the projected vector samples is maximized.
     The input data is centered for each feature before applying the SVD.
 
     Parameters
@@ -31,14 +33,14 @@ class PCA:
         samples corresponding to the `n_components` largest
         eigenvalues.
         Equivalently, the right singular vectors of the centered
-        input data.
+        input data X of shape (n_samples, n_features).
 
     mean_ : ndarray of shape (n_features,)
         Per-feature empirical mean, estimated from the training set.
         Equal to `X.mean(axis=0)`.
 
     n_features_ : int
-        Number of features in the training data.
+        Number of features in each sample of the training data.
 
     n_samples_ : int
         Number of samples in the training data.
@@ -82,11 +84,11 @@ class PCA:
 
         U, S, VT = linalg.svd(X, full_matrices=False)
 
-        components = VT[:n_components].T
+        components = VT.T
 
         self.n_samples_, self.n_features_ = n_samples, n_features
         self.n_components = n_components
-        self.components_ = components
+        self.components_ = components[:, :n_components]
 
         U = U[:, :n_components]
         # X_new = X * V = U * S * VT * V = U * S

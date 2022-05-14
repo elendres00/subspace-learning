@@ -11,10 +11,11 @@ class TwoDimensionalPCA:
     """Two-Dimensional Principal Component Analysis (2DPCA).
 
     PCA based multilinear subspace learning method operating directly
-    on images in their natural matrix representation. 2DPCA applies a
-    linear transformation on the right side of the image matrices
-    projecting them to a lower dimensional tensor subspace, such that
-    the variance of the projected samples is maximized.
+    on images in their natural matrix representation. 2DPCA finds a
+    linear transformation that is applied on the right side of the
+    image matrices projecting them to a lower dimensional tensor
+    subspace, such that the variance of the projected samples is
+    maximized.
     The input matrices are centered before applying the projection.
 
     Parameters
@@ -32,7 +33,7 @@ class TwoDimensionalPCA:
         eigenvectors of the covariance matrix of the image matrices
         corresponding to the `n_components` largest eigenvalues.
         Equivalently, the right singular vectors of the centered and
-        stacked input matrices.
+        stacked input matrices X of shape (n_samples*n_rows, n_columns).
 
     mean_ : ndarray of shape (n_rows, n_columns)
         Per-feature empirical mean, estimated from the training set.
@@ -65,7 +66,7 @@ class TwoDimensionalPCA:
         Parameters
         ----------
         X : array-like of shape (n_samples, n_rows, n_columns)
-            Training data
+            Training data.
 
         Returns
         -------
@@ -116,11 +117,11 @@ class TwoDimensionalPCA:
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_rows, n_columns)
+        X : ndarray of shape (n_samples, n_rows, n_columns)
 
         Returns
         -------
-        X_new : array-like of shape (n_samples, n_rows, n_components)
+        X_new : ndarray of shape (n_samples, n_rows, n_components)
             Projection of the matrices in X
         """
         X = X - self.mean_
@@ -134,10 +135,10 @@ class TwoDimensionalPCA:
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_rows, n_components)
+        X : ndarray of shape (n_samples, n_rows, n_components)
 
         Returns
         -------
-        X_original : array-like of shape (n_samples, n_rows, n_columns)
+        X_original : ndarray of shape (n_samples, n_rows, n_columns)
         """
         return np.matmul(X, self.components_.T) + self.mean_
