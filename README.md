@@ -4,6 +4,7 @@ algorithms PCA, 2DPCA and MPCA.
 
 ## Dependencies
 `scikit-learn`
+`matplotlib`
 
 ## Datasets
 The UCI ML Digits, ORL and LFW datasets are automatically downloaded by the scikit-learn library
@@ -30,8 +31,8 @@ The experiments can be run as follows
 ```
 python experiment.py --dataset=dataset
 ```
-by replacing `experiment.py` with one of the experiments above and the `dataset` by one of the datasets below:
-- UCI ML Digits dataset (`--dataset=digits`)
-- ORL face dataset (`--dataset=olivetti`)
-- LFW face dataset (`--dataset=lfw`)
-- AVLetters lip reading dataset (`--dataset=avletters`)
+by replacing `experiment.py` with one of the experiments above and `dataset` by one of the datasets below:
+- UCI ML Digits dataset `--dataset=digits`
+- ORL face dataset `--dataset=olivetti`
+- LFW face dataset `--dataset=lfw`
+- AVLetters lip reading dataset `--dataset=avletters`
