@@ -1,6 +1,8 @@
 """Multilinear Principal Component Analysis.
 """
 
+# Copyright (c) 2022, Elias Endres;
+# Copyright (c) 2007-2022 The scikit-learn developers.
 # License: BSD 3 clause
 
 import numpy as np

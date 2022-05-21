@@ -58,7 +58,7 @@ def fetch_avletters_averaged():
 
     lip_paths = []
     for f in listdir(folderpath):
-        if isfile(join(folderpath, f)) and not f.endswith('Store'):
+        if isfile(join(folderpath, f)) and f.endswith('.mat'):
             lip_paths.append(f)
 
     n_samples = 780
@@ -95,74 +95,3 @@ def fetch_avletters_averaged():
         label[i] = ord(lip_path[0]) - ord('A')
 
     return (lip_videos, persons, label)
-
-def fetch_avletters():
-    """Load the AVLetters dataset.
-
-    ================   =======================
-    Classes                                 26
-    Samples total                          780
-    Dimensionality                (40, 60, 80)
-    Features           real, between 255 and 0
-    ================   =======================
-
-    Returns
-    -------
-     (lip_videos, lip_videos_n_frames, persons, label) : tuple
-        lip_video: ndarray of shape (780, 40, 60, 80)
-            The lip videos.
-            Each video has between 12 and 40 60x80 image frames.
-
-        lip_video_n_frames : ndarray of shape (780,)
-            Number of frames of each video sample.
-
-        persons : ndarray of shape (780,)
-            The persons corresponding to the lip videos.
-
-        label : ndarray of shape (780,)
-            Labels corresponding to the lip videos.
-            Those labels are ranging from 0-23 and
-            correspond to the letters spoken in the lip video.
-    """
-
-    if not (exists(folderpath)):
-        raise IOError("Data not found")
-
-    lip_paths = []
-    for f in listdir(folderpath):
-        if isfile(join(folderpath, f)) and not f.endswith('Store'):
-            lip_paths.append(f)
-
-    n_samples = 780
-    max_n_frames = 40
-    n_rows = 60
-    n_columns = 80
-
-    people = ['Anya', 'Bill', 'Faye', 'John', 'Kate', 'Nicola', 'Stephen',
-              'Steve', 'Verity', 'Yi']
-
-    lip_videos = np.zeros(shape=(n_samples, max_n_frames, n_rows, n_columns), dtype=float)
-    lip_videos_n_frames = np.zeros(shape=(n_samples,), dtype=int)
-    persons = np.zeros(shape=(n_samples,), dtype='<U8')
-    label = np.zeros(shape=(n_samples,), dtype=int)
-
-    # Save all lip videos in the preferred form
-    for i, lip_path in enumerate(lip_paths):
-        # Load the lip video
-        lip_mat = loadmat(folderpath + lip_path)
-        n_frames_curr = int(lip_mat['siz'][0,2])
-        lip_video = lip_mat['vid'].reshape(n_columns, n_rows, n_frames_curr)
-        lip_video = lip_video.transpose(2, 1, 0)
-
-        for j in range(n_frames_curr):
-            lip_videos[i, j] = lip_video[j]
-
-        lip_videos_n_frames[i] = n_frames_curr
-
-        for p in people:
-            if p in lip_path:
-                persons[i] = p
-
-        label[i] = ord(lip_path[0]) - ord('A')
-
-    return (lip_videos, lip_videos_n_frames, persons, label)
